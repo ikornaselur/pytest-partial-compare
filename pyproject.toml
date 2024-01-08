@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "pytest-partial-dict-compare"
+version = "0.1.0"
+description = ""
+authors = ["Axel Örn Sigurðsson <git@absalon.dev>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "partial_dict_compare"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.plugins]
+pytest11 = { partial_dict_compare = "partial_dict_compare" }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
