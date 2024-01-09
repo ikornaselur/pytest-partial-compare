@@ -72,7 +72,8 @@ from partial_compare import DictSubset as DS
 
 data = main()
 
-assert data == DS({
+# Assert that data is a superset of the DictSubset
+assert data >= DS({
     "first_name": "Jane",
     "last_name": "Doe",
     "children": [],
@@ -86,7 +87,7 @@ assert data == DS({
 and with the error output from this specific comparison being:
 
 ```
->  assert data == DS(
+>  assert data >= DS(
        {
            "first_name": "Jane",
            "last_name": "Doe",
