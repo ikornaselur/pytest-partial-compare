@@ -1,11 +1,11 @@
-# pytest-partial-dict-compare
+# pytest-partial-compare
 
-A pytest plugin that lets you partially compare dictionaries.
+A pytest plugin that lets you partially compare dictionaries and lists.
 
 When you have a complex dictionary and you only care about partially
 validating, it can be bothersome to do multiple asserts, one for each value.
 
-By using a `DictSubSet` you can write the subset of the dictionary that you
+By using a `DictSubset` you can write the subset of the dictionary that you
 want to be present, and get clear assertion errors if there is any values
 missing or not matching
 
@@ -64,21 +64,21 @@ E    + John
 
 which works fine, but in this case only shows the first assertion error hit.
 
-Using `DictSubSet` from the plugin you can define the subset you want to check
+Using `DictSubset` from the plugin you can define the subset you want to check
 for, like this:
 
 ```python
-from partial_dict_compare import DictSubSet as DSS
+from partial_compare import DictSubset as DS
 
 data = main()
 
-assert data == DSS({
+assert data == DS({
     "first_name": "Jane",
     "last_name": "Doe",
     "children": [],
     "pets": [
-        DSS({"type": "cat", "name": "Fido"}),
-        DSS({"name": "Sylvester"}),
+        DS({"type": "cat", "name": "Fido"}),
+        DS({"name": "Sylvester"}),
     ],
 })
 ```
@@ -86,14 +86,14 @@ assert data == DSS({
 and with the error output from this specific comparison being:
 
 ```
->  assert data == DSS(
+>  assert data == DS(
        {
            "first_name": "Jane",
            "last_name": "Doe",
            "children": [],
            "pets": [
-               DSS({"type": "cat"}),
-               DSS({"name": "Sylvester"}),
+               DS({"type": "cat", "name": "Fido"}),
+               DS({"name": "Sylvester"}),
            ],
        }
    )

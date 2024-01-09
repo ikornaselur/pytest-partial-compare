@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 NotPresent = object()
 
 
-class DictSubSet:
+class DictSubset:
     def __init__(self, items: dict):
         self.items = items
 
@@ -17,7 +17,7 @@ class DictSubSet:
         return self.items[key]
 
     def __repr__(self):
-        return f"DictSubSet({repr(self.items)})"
+        return f"DictSubset({repr(self.items)})"
 
 
 def _compare_lists(left: list, right: list, prefix: str = "") -> Iterator[str]:
@@ -26,7 +26,7 @@ def _compare_lists(left: list, right: list, prefix: str = "") -> Iterator[str]:
         return
     for i, (left_element, right_element) in enumerate(zip(left, right)):
         if left_element != right_element:
-            if isinstance(left_element, dict) and isinstance(right_element, DictSubSet):
+            if isinstance(left_element, dict) and isinstance(right_element, DictSubset):
                 yield from _compare_values(
                     left_element, right_element, prefix=f"{prefix}{i}."
                 )
@@ -39,7 +39,7 @@ def _compare_lists(left: list, right: list, prefix: str = "") -> Iterator[str]:
                 yield f"    {left_element} != {right_element}"
 
 
-def _compare_values(left: dict, right: DictSubSet, prefix: str = "") -> Iterator[str]:
+def _compare_values(left: dict, right: DictSubset, prefix: str = "") -> Iterator[str]:
     for key in right.items:
         left_element = left.get(key, NotPresent)
         right_element = right[key]
@@ -51,7 +51,7 @@ def _compare_values(left: dict, right: DictSubSet, prefix: str = "") -> Iterator
                 yield from _compare_lists(
                     left_element, right_element, prefix=f"{key}."
                 )
-            elif isinstance(left_element, dict) and isinstance(right_element, DictSubSet):
+            elif isinstance(left_element, dict) and isinstance(right_element, DictSubset):
                 yield from _compare_values(
                     left_element, right_element, prefix=f"{key}."
                 )
@@ -66,7 +66,7 @@ def pytest_assertrepr_compare(
     left: Any,
     right: Any,
 ):
-    if not (isinstance(left, dict) and isinstance(right, DictSubSet) and op == "=="):
+    if not (isinstance(left, dict) and isinstance(right, DictSubset) and op == "=="):
         return
 
     return ["Comparing dict with a sub set:", *_compare_values(left, right)]
