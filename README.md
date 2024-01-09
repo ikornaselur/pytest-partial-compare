@@ -162,8 +162,6 @@ which produces the following error
 E  AssertionError: assert Dictionary is not a subset
 E      Key `first_name` has different values:
 E        John != Jane
-E      Key `pets.1.name` has different values:
-E        Felix != Sylvester
 E      List at key `pets` is missing elements:
 E        DictSubset({'name': 'Sylvester'})
 ```

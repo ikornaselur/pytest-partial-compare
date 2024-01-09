@@ -124,9 +124,6 @@ def _compare_lists_subset(
         else:
             yield f"  List at key `{prefix[:-1]}` is too short, expected at least {r_len} elements"
         return
-    if l_len == r_len:
-        # We can just compare them directly
-        yield from _compare_lists(left, right.items, prefix)
 
     # Compare elements until we reach the end of the subset list
     l_idx, r_idx = 0, 0
