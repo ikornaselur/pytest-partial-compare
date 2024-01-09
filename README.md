@@ -1,5 +1,8 @@
 # pytest-partial-compare
 
+> [!WARNING]
+> This is just a proof of concept, do not try to use this
+
 A pytest plugin that lets you partially compare dictionaries and lists.
 
 When you have a complex dictionary and lists and you only care about partially
@@ -164,3 +167,10 @@ E        Felix != Sylvester
 E      List at key `pets` is missing elements:
 E        DictSubset({'name': 'Sylvester'})
 ```
+
+## Known issues
+
+There are likely heaps of issues with this approach, but here are some of the
+ones I'm aware of:
+
+- [ ] Can't use ListSubset inside another list
