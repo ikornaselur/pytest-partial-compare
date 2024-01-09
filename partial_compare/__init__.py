@@ -11,7 +11,7 @@ class PartialCompareError(Exception):
 
 
 class Subset:
-    _internal: ClassVar[bool] = False
+    pass
 
 
 class DictSubset(Subset):
@@ -31,8 +31,6 @@ class DictSubset(Subset):
         return self.items == {k: other[k] for k in self.items if k in other}
 
     def __eq__(self, other):
-        if not self._internal:
-            raise PartialCompareError("Usage: data >= DictSubset({...})")
         return self.__le__(other)
 
     def __lt__(self, other):
@@ -82,8 +80,6 @@ class ListSubset(Subset):
         return True
 
     def __eq__(self, other):
-        if not self._internal:
-            raise PartialCompareError("Usage: data >= ListSubset([...])")
         return self.__le__(other)
 
     def __lt__(self, other):
@@ -204,13 +200,10 @@ def pytest_assertrepr_compare(
     if op != ">=":
         return
     if isinstance(left, dict) and isinstance(right, DictSubset):
-        Subset._internal = True
         output = ["Dictionary is not a subset", *_compare_dicts_subset(left, right)]
     elif isinstance(left, list) and isinstance(right, ListSubset):
-        Subset._internal = True
         output = ["List is not a subset", *_compare_lists_subset(left, right)]
     else:
         return
 
-    Subset._internal = False
     return output

@@ -140,6 +140,21 @@ E      List is missing elements:
 E        5
 ```
 
+and even nested
+
+```python
+data = [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+assert data >= LS([LS([2, 3]), LS([5, 7, 9])])
+```
+
+```
+>  assert data >= LS([LS([2, 3]), LS([5, 7, 9])])
+E  assert List is not a subset
+E      List is missing elements:
+E        ListSubset([5, 7, 9])
+```
+
 ## Combining DictSubset and ListSubset
 
 You can combine the two types for more complex checks:
@@ -165,10 +180,3 @@ E        John != Jane
 E      List at key `pets` is missing elements:
 E        DictSubset({'name': 'Sylvester'})
 ```
-
-## Known issues
-
-There are likely heaps of issues with this approach, but here are some of the
-ones I'm aware of:
-
-- [ ] Can't use ListSubset inside another list
