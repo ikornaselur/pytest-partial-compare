@@ -2,14 +2,14 @@
 
 A pytest plugin that lets you partially compare dictionaries and lists.
 
-When you have a complex dictionary and you only care about partially
+When you have a complex dictionary and lists and you only care about partially
 validating, it can be bothersome to do multiple asserts, one for each value.
 
-By using a `DictSubset` you can write the subset of the dictionary that you
-want to be present, and get clear assertion errors if there is any values
-missing or not matching
+By using a `DictSubset` and `ListSubset` you can write the subset of the
+dictionary or list that you want to be present, and get clear assertion errors
+if there is any values missing or not matching
 
-## Example
+## DictSubset
 
 ```python
 # A complex dictionary
@@ -105,4 +105,62 @@ E      Key `pets.0.type` has different values:
 E        dog != cat
 E      Key `pets.1.name` has different values:
 E        Felix != Sylvester
+```
+
+## ListSubset
+
+A list subset is similary to a dict subset, by checking that the elements are
+found in the data being compared, in the same order but not necessarily
+consequitive.
+
+For example, you may have a list of events and you just want to validate that
+within those events are specific events, in a specific order. If the order
+doesn't matter, presence in a set can be used instead.
+
+```python
+from partial_compare import ListSubset as LS
+
+data = [1, 2, 3, 4]
+
+# Assert that data is a superset of the DictSubset
+assert data >= LS([2, 3])  # passes
+assert data >= LS([1, 4])  # passes
+assert data >= LS([1, 5])  # fails
+```
+
+The last assert produces the following error output:
+
+```
+>  assert data >= LS([1, 5])
+E  assert List is not a subset
+E      List is missing elements:
+E        5
+```
+
+## Combining DictSubset and ListSubset
+
+You can combine the two types for more complex checks:
+
+```python
+assert data >= DS({
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "children": [],
+    "pets": LS([
+        {"type": "dog", "name": "Fido"},
+        DS({"name": "Sylvester"}),  # There's no animal with that name, no matter the type
+    ]),
+})
+```
+
+which produces the following error
+
+```
+E  AssertionError: assert Dictionary is not a subset
+E      Key `first_name` has different values:
+E        John != Jane
+E      Key `pets.1.name` has different values:
+E        Felix != Sylvester
+E      List at key `pets` is missing elements:
+E        DictSubset({'name': 'Sylvester'})
 ```
